@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/my_bloc.dart';
 
@@ -64,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       style: Theme.of(context).textTheme.headlineMedium,
                     );
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 }),
           ],

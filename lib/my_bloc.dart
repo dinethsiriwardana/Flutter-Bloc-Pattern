@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 class MyBlock {
   //State Stream
 
   final StreamController<int> _stateStreamController = StreamController();
 
-  StreamSink get stateStreamSink => _stateStreamController.sink;
+  StreamSink get _stateStreamSink => _stateStreamController.sink;
 
   Stream<int> get stateStream => _stateStreamController.stream;
 
@@ -15,13 +17,19 @@ class MyBlock {
 
   StreamSink get eventStreamSink => _eventstreamController.sink;
 
-  Stream<int> get eventStream => _eventstreamController.stream;
+  Stream<int> get _eventStream => _eventstreamController.stream;
 
   MyBlock() {
-    eventStream.listen((event) {
-      print(event);
-      event++;
-      stateStreamSink.add(event);
+    _eventStream.listen((event) {
+      if (kDebugMode) {
+        print(event);
+      }
+      counter(event);
+      _stateStreamSink.add(event);
     });
+  }
+
+  void counter(event) {
+    event++;
   }
 }
