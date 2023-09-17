@@ -34,11 +34,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   MyBlock myBlock = MyBlock();
 
-  void _incrementCounter() {
-    // _counter++;   // This is the original code and move it into my_bloc.dart
-    myBlock.eventStreamSink.add(_counter);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,15 +48,26 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'You have pushed the button this many times:',
             ),
-            StreamBuilder<int>(
+            StreamBuilder<MyState>(
                 stream: myBlock.stateStream,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    _counter = snapshot.data ?? 0;
-                    return Text(
-                      '$_counter',
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    );
+                    MyState? state = snapshot.data;
+                    if (state is IncrementState) {
+                      _counter = state.value;
+                      return Text(
+                        '${state.value}',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      );
+                    } else if (state is DecrementState) {
+                      _counter = state.value;
+                      return Text(
+                        '${state.value}',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      );
+                    } else {
+                      return Container();
+                    }
                   } else {
                     return const CircularProgressIndicator();
                   }
@@ -69,10 +75,27 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: SizedBox(
+        width: 130,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FloatingActionButton(
+              onPressed: () {
+                myBlock.eventStreamSink.add(IncrementEvent(value: _counter));
+              },
+              tooltip: 'Increment',
+              child: const Icon(Icons.add),
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                myBlock.eventStreamSink.add(DecrementEvent(value: _counter));
+              },
+              tooltip: 'Decrement',
+              child: const Icon(Icons.remove),
+            ),
+          ],
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
