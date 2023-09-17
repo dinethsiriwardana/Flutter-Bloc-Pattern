@@ -18,7 +18,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: BlocProvider(
+        create: (context) => CounterBloc(),
+        child: const MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
     );
   }
 }
@@ -34,8 +37,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  late CounterBloc counterBloc;
   // MyBlock myBlock = MyBlock();
-  CounterBloc counterBloc = CounterBloc();
+  // CounterBloc counterBloc = CounterBloc();   //? Comment after adding the blocprovider
+
+  @override
+  void initState() {
+    counterBloc = BlocProvider.of<CounterBloc>(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,8 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
 
-            BlocBuilder(
-              bloc: counterBloc,
+            BlocBuilder<CounterBloc, CounterState>(
+              // bloc: counterBloc,  //? comment After adding the <CounterBloc , CounterState>
               builder: (context, state) {
                 if (state is IncrementState) {
                   _counter = state.value;
