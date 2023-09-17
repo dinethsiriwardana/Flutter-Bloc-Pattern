@@ -36,11 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
   MyBlock myBlock = MyBlock();
 
   void _incrementCounter() {
-    if (kDebugMode) {
-      print(_counter);
-    }
-    _counter++;
-    myBlock.statestreamSink.add(_counter);
+    // _counter++;   // This is the original code and move it into my_bloc.dart
+    myBlock.eventStreamSink.add(_counter);
   }
 
   @override
@@ -58,9 +55,10 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             StreamBuilder<int>(
-                stream: myBlock.statestream,
+                stream: myBlock.stateStream,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
+                    _counter = snapshot.data ?? 0;
                     return Text(
                       '$_counter',
                       style: Theme.of(context).textTheme.headlineMedium,
