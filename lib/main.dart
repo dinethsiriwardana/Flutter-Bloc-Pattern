@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
       print(_counter);
     }
     _counter++;
-    myBlock.streamSink.add(_counter);
+    myBlock.statestreamSink.add(_counter);
   }
 
   @override
@@ -58,12 +58,16 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             StreamBuilder<int>(
-                stream: myBlock.stream,
+                stream: myBlock.statestream,
                 builder: (context, snapshot) {
-                  return Text(
-                    '$_counter',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  );
+                  if (snapshot.hasData) {
+                    return Text(
+                      '$_counter',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    );
+                  } else {
+                    return CircularProgressIndicator();
+                  }
                 }),
           ],
         ),

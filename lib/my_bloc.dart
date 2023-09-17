@@ -1,9 +1,9 @@
 import 'dart:async';
 
 class MyBlock {
-  StreamController<int> streamController = StreamController();
+  final StreamController<int> _statestreamController = StreamController();
 
-  StreamSink get streamSink => streamController.sink;
+  StreamSink get statestreamSink => _statestreamController.sink;
 
-  Stream<int> get stream => streamController.stream;
+  Stream<int> get statestream => _statestreamController.stream;
 }
